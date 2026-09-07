@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: cashier_db
+    restart: always
+    environment:
+      POSTGRES_USER: cashier_user
+      POSTGRES_PASSWORD: cashier_password
+      POSTGRES_DB: cashier_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: cashier_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://cashier_user:cashier_password@db:5432/cashier_db
+      - JWT_SECRET_KEY=supersecretjwtkey12345
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: cashier_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+      - BACKEND_URL=http://backend:5000
+
+volumes:
+  pgdata:

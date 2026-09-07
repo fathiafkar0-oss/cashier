@@ -1,0 +1,136 @@
+# =========================================
+# CASHIER Project - Git Ignore Configuration
+# =========================================
+
+# -----------------------------------------
+# Environment Variables & Secrets
+# -----------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+
+# -----------------------------------------
+# Python / Flask Backend
+# -----------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+backend/venv/
+backend/.venv/
+
+# Flask instance folder & databases
+instance/
+backend/instance/
+*.sqlite
+*.sqlite3
+*.db
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# -----------------------------------------
+# Node.js / React / Vite Frontend
+# -----------------------------------------
+node_modules/
+frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Production Build Output
+frontend/dist/
+frontend/dist-ssr/
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# -----------------------------------------
+# Docker & Database Volumes
+# -----------------------------------------
+*.log
+docker-compose.override.yml
+postgres_data/
+db_data/
+
+# -----------------------------------------
+# IDE & Code Editors
+# -----------------------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*~
+
+# -----------------------------------------
+# Operating System Artifacts
+# -----------------------------------------
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.directory
+
+# -----------------------------------------
+# Local Scratch & Temporary Files
+# -----------------------------------------
+scratch/
+tmp/
+temp/
