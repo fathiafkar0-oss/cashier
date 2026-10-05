@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preview ERD - CASHIER</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #121110;
+      color: #f4f3ed;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-size: 14px;
+      color: rgba(244, 243, 237, 0.5);
+    }
+    .card {
+      background: rgba(42, 42, 42, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 1200px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+    }
+    .mermaid {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Entity Relationship Diagram (ERD)</h1>
+    <p>Database Architecture &amp; Schema &bull; CASHIER System</p>
+  </div>
+
+  <div class="card">
+    <pre class="mermaid">
+erDiagram
+    USERS ||--o{ PRODUCTS : "memiliki"
+    USERS ||--o{ CUSTOMERS : "memiliki"
+    USERS ||--o{ TRANSACTIONS : "mencatat"
+    USERS ||--o{ EXPENSES : "mencatat"
+    
+    CUSTOMERS ||--o{ TRANSACTIONS : "melakukan kasbon"
+    CUSTOMERS ||--o{ DEBT_PAYMENTS : "membayar cicilan"
+    
+    TRANSACTIONS ||--|{ TRANSACTION_DETAILS : "memiliki rincian"
+    PRODUCTS ||--o{ TRANSACTION_DETAILS : "direferensikan dalam"
+
+    USERS {
+        int id PK
+        string username UK
+        string email UK
+        string store_name
+        string password_hash
+        int failed_login_attempts
+        datetime locked_until
+        datetime created_at
+    }
+
+    PRODUCTS {
+        int id PK
+        int user_id FK
+        string sku
+        string name
+        int price
+        int cost_price
+        int stock
+        int min_stock
+        string category
+        boolean is_retail
+        string retail_group
+        int half_pack_price
+        int pack_size
+        datetime created_at
+    }
+
+    CUSTOMERS {
+        int id PK
+        int user_id FK
+        string name
+        int total_debt
+        datetime created_at
+    }
+
+    TRANSACTIONS {
+        int id PK
+        int user_id FK
+        string transaction_code UK
+        string payment_method
+        int total_amount
+        int amount_paid
+        int change_amount
+        int customer_id FK
+        datetime created_at
+    }
+
+    TRANSACTION_DETAILS {
+        int id PK
+        int transaction_id FK
+        int product_id FK
+        string custom_name
+        int quantity
+        int price
+        int cost_price
+    }
+
+    DEBT_PAYMENTS {
+        int id PK
+        int customer_id FK
+        int amount
+        datetime created_at
+    }
+
+    EXPENSES {
+        int id PK
+        int user_id FK
+        string category
+        int amount
+        string description
+        datetime created_at
+    }
+    </pre>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#181615',
+        primaryColor: '#2A2A2A',
+        primaryTextColor: '#F4F3ED',
+        primaryBorderColor: 'rgba(255,255,255,0.2)',
+        lineColor: '#F4F3ED',
+        secondaryColor: '#1c1a18',
+        tertiaryColor: '#22201e'
+      }
+    });
+  </script>
+</body>
+</html>

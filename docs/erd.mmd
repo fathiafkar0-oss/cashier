@@ -1,0 +1,85 @@
+erDiagram
+    USERS ||--o{ PRODUCTS : "memiliki"
+    USERS ||--o{ CUSTOMERS : "memiliki"
+    USERS ||--o{ TRANSACTIONS : "mencatat"
+    USERS ||--o{ EXPENSES : "mencatat"
+    
+    CUSTOMERS ||--o{ TRANSACTIONS : "melakukan kasbon"
+    CUSTOMERS ||--o{ DEBT_PAYMENTS : "membayar cicilan"
+    
+    TRANSACTIONS ||--|{ TRANSACTION_DETAILS : "memiliki rincian"
+    PRODUCTS ||--o{ TRANSACTION_DETAILS : "direferensikan dalam"
+
+    USERS {
+        int id PK
+        string username UK
+        string email UK
+        string store_name
+        string password_hash
+        int failed_login_attempts
+        datetime locked_until
+        datetime created_at
+    }
+
+    PRODUCTS {
+        int id PK
+        int user_id FK
+        string sku
+        string name
+        int price
+        int cost_price
+        int stock
+        int min_stock
+        string category
+        boolean is_retail
+        string retail_group
+        int half_pack_price
+        int pack_size
+        datetime created_at
+    }
+
+    CUSTOMERS {
+        int id PK
+        int user_id FK
+        string name
+        int total_debt
+        datetime created_at
+    }
+
+    TRANSACTIONS {
+        int id PK
+        int user_id FK
+        string transaction_code UK
+        string payment_method
+        int total_amount
+        int amount_paid
+        int change_amount
+        int customer_id FK
+        datetime created_at
+    }
+
+    TRANSACTION_DETAILS {
+        int id PK
+        int transaction_id FK
+        int product_id FK
+        string custom_name
+        int quantity
+        int price
+        int cost_price
+    }
+
+    DEBT_PAYMENTS {
+        int id PK
+        int customer_id FK
+        int amount
+        datetime created_at
+    }
+
+    EXPENSES {
+        int id PK
+        int user_id FK
+        string category
+        int amount
+        string description
+        datetime created_at
+    }

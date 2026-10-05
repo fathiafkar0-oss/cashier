@@ -6,13 +6,19 @@ services:
     container_name: cashier_db
     restart: always
     environment:
-      POSTGRES_USER: cashier_user
-      POSTGRES_PASSWORD: cashier_password
-      POSTGRES_DB: cashier_db
+      POSTGRES_USER: ${POSTGRES_USER:-cashier_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cashier_password}
+      POSTGRES_DB: ${POSTGRES_DB:-cashier_db}
     ports:
-      - "5432:5432"
+      # Terikat ke localhost (127.0.0.1) agar database aman dan tidak terekspos sembarangan ke jaringan luar
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cashier_user} -d ${POSTGRES_DB:-cashier_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: ./backend
@@ -21,12 +27,13 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://cashier_user:cashier_password@db:5432/cashier_db
-      - JWT_SECRET_KEY=supersecretjwtkey12345
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-cashier_user}:${POSTGRES_PASSWORD:-cashier_password}@db:5432/${POSTGRES_DB:-cashier_db}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-supersecretjwtkey12345}
     volumes:
       - ./backend:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
@@ -39,6 +46,24 @@ services:
     environment:
       - NODE_ENV=production
       - BACKEND_URL=http://backend:5000
+
+  # Service utilitas untuk menjalankan backup on-demand via Docker
+  # Cara pakai: docker compose run --rm backup
+  backup:
+    image: amazon/aws-cli:latest
+    container_name: cashier_backup_runner
+    profiles: ["tools"]
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - S3_BUCKET=${S3_BUCKET}
+    volumes:
+      - ./backups:/backups
+      - ./scripts:/scripts:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["echo 'Gunakan ./scripts/backup_s3.sh dari host atau jalankan backup script.'"]
 
 volumes:
   pgdata:
