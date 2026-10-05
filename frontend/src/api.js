@@ -1,40 +1,35 @@
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: '',
+// Instance API untuk Customer Microservice
+export const customerApi = axios.create({
+  baseURL: '/api/customer',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor untuk menyuntikkan token JWT secara otomatis ke setiap request
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
+customerApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem('customer_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Instance API untuk Employee Microservice
+export const employeeApi = axios.create({
+  baseURL: '/api/employee',
+  headers: {
+    'Content-Type': 'application/json',
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+});
 
-// Interceptor untuk menangani error autentikasi 401 (token kadaluwarsa/tidak valid)
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      // Arahkan kembali ke halaman login jika mendeteksi token invalid/kadaluwarsa
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
-      }
-    }
-    return Promise.reject(error);
+employeeApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem('employee_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-);
+  return config;
+});
 
-export default api;
+export default { customerApi, employeeApi };

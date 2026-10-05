@@ -6,8 +6,9 @@ from app.database import db
 def create_app(test_config=None):
     app = Flask(__name__)
 
+    default_db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'instance', 'restaurant_pos.db'))
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-        'DATABASE_URL', 'sqlite:///restaurant_pos.db'
+        'DATABASE_URL', f'sqlite:///{default_db_path}'
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.environ.get(

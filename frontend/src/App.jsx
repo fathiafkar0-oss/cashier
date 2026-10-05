@@ -2,31 +2,27 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-// Layout
-import Layout from './components/Layout';
+// Customer Pages
+import TableSelection from './pages/customer/TableSelection';
+import MenuCatalog from './pages/customer/MenuCatalog';
+import Checkout from './pages/customer/Checkout';
+import OrderStatus from './pages/customer/OrderStatus';
 
-// Pages
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Cashier from './pages/Cashier';
-import Inventory from './pages/Inventory';
-import Kasbon from './pages/Kasbon';
-import TransactionHistory from './pages/TransactionHistory';
-import ExpensePage from './pages/ExpensePage';
-
-// Pelindung Halaman Private: Redirect jika tidak ada token
-function ProtectedRoute({ children }) {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-}
+// Employee Layout & Pages
+import EmployeeLayout from './components/employee/EmployeeLayout';
+import EmployeeLogin from './pages/employee/EmployeeLogin';
+import CashierOrders from './pages/employee/CashierOrders';
+import CashierHistory from './pages/employee/CashierHistory';
+import AdminDashboard from './pages/employee/AdminDashboard';
+import AdminMenus from './pages/employee/AdminMenus';
+import AdminReports from './pages/employee/AdminReports';
+import AdminTargets from './pages/employee/AdminTargets';
+import AdminTables from './pages/employee/AdminTables';
 
 export default function App() {
   return (
     <BrowserRouter>
-      {/* Provider Toast Notification 3D Glassmorphism */}
+      {/* Toast Notification Provider */}
       <Toaster 
         position="top-right" 
         gutter={12}
@@ -36,75 +32,67 @@ export default function App() {
           zIndex: 99999,
         }}
         toastOptions={{ 
-          duration: 4000,
+          duration: 3500,
           style: {
-            background: 'rgba(28, 26, 24, 0.88)',
+            background: 'rgba(28, 26, 24, 0.95)',
             backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.7)',
             color: '#F4F3ED',
-            padding: '14px 20px',
-            borderRadius: '1.25rem',
-            fontSize: '0.875rem',
+            padding: '12px 18px',
+            borderRadius: '1rem',
+            fontSize: '0.85rem',
             fontWeight: '600',
-            letterSpacing: '0.01em',
           },
           success: {
             iconTheme: {
-              primary: '#4ade80',
-              secondary: '#1a1816',
+              primary: '#10b981',
+              secondary: '#1c1a18',
             },
             style: {
-              border: '1px solid rgba(74, 222, 128, 0.3)',
-              boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(74, 222, 128, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
             },
           },
           error: {
             iconTheme: {
-              primary: '#f87171',
-              secondary: '#1a1816',
+              primary: '#f43f5e',
+              secondary: '#1c1a18',
             },
             style: {
-              border: '1px solid rgba(248, 113, 113, 0.3)',
-              boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(248, 113, 113, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
-            },
-          },
-          loading: {
-            iconTheme: {
-              primary: '#F4F3ED',
-              secondary: '#1a1816',
-            },
-            style: {
-              border: '1px solid rgba(244, 243, 237, 0.2)',
+              border: '1px solid rgba(244, 63, 94, 0.3)',
             },
           },
         }} 
       />
 
       <Routes>
-        {/* Route Login */}
-        <Route path="/login" element={<Login />} />
+        {/* Customer Self-Ordering Flow */}
+        <Route path="/" element={<Navigate to="/table-selection" replace />} />
+        <Route path="/table-selection" element={<TableSelection />} />
+        <Route path="/menu" element={<MenuCatalog />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-status/:id" element={<OrderStatus />} />
 
-        {/* Route Panel Utama yang Dilindungi */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="cashier" element={<Cashier />} />
-          <Route path="inventory" element={<Inventory />} />
-          <Route path="kasbon" element={<Kasbon />} />
-          <Route path="history" element={<TransactionHistory />} />
-          <Route path="expenses" element={<ExpensePage />} />
+        {/* Employee Portal Login */}
+        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/admin/login" element={<EmployeeLogin />} />
+
+        {/* Employee Authenticated Pages */}
+        <Route element={<EmployeeLayout />}>
+          {/* Admin Specific */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/menus" element={<AdminMenus />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/targets" element={<AdminTargets />} />
+          <Route path="/admin/tables" element={<AdminTables />} />
+
+          {/* Cashier & Admin Shared */}
+          <Route path="/cashier/orders" element={<CashierOrders />} />
+          <Route path="/cashier/history" element={<CashierHistory />} />
         </Route>
 
-        {/* Arahkan Rute Tak Dikenal ke Dashboard */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/table-selection" replace />} />
       </Routes>
     </BrowserRouter>
   );
