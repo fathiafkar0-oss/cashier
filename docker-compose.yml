@@ -1,5 +1,17 @@
 version: '3.8'
 
+# ==============================================================================
+# MICRODINE · Restoran POS
+#   db                → PostgreSQL (dipakai bersama oleh kedua microservice)
+#   customer-service  → API pelanggan (self-ordering)   http://localhost:5001
+#   employee-service  → API kasir & admin                http://localhost:5002
+#   frontend          → Web React (Vite)                 http://localhost:3000
+# ==============================================================================
+
+x-service-env: &service-env
+  DATABASE_URL: postgresql://${POSTGRES_USER:-cashier_user}:${POSTGRES_PASSWORD:-cashier_password}@db:5432/${POSTGRES_DB:-cashier_db}
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY:-supersecretjwtkey12345}
+
 services:
   db:
     image: postgres:15-alpine
@@ -14,23 +26,36 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      # Skema awal dibuat otomatis saat volume database masih kosong
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cashier_user} -d ${POSTGRES_DB:-cashier_db}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  backend:
-    build: ./backend
-    container_name: cashier_backend
+  customer-service:
+    build: ./customer-microservice
+    container_name: cashier_customer_service
     restart: always
     ports:
-      - "5000:5000"
+      - "5001:5001"
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-cashier_user}:${POSTGRES_PASSWORD:-cashier_password}@db:5432/${POSTGRES_DB:-cashier_db}
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-supersecretjwtkey12345}
-    volumes:
-      - ./backend:/app
+      <<: *service-env
+      PORT: 5001
+    depends_on:
+      db:
+        condition: service_healthy
+
+  employee-service:
+    build: ./employee-microservice
+    container_name: cashier_employee_service
+    restart: always
+    ports:
+      - "5002:5002"
+    environment:
+      <<: *service-env
+      PORT: 5002
     depends_on:
       db:
         condition: service_healthy
@@ -41,11 +66,14 @@ services:
     restart: always
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
     environment:
-      - NODE_ENV=production
-      - BACKEND_URL=http://backend:5000
+      NODE_ENV: development
+      # Dibaca oleh vite.config.js untuk proxy /api/customer dan /api/employee
+      CUSTOMER_API_URL: http://customer-service:5001
+      EMPLOYEE_API_URL: http://employee-service:5002
+    depends_on:
+      - customer-service
+      - employee-service
 
   # Service utilitas untuk menjalankan backup on-demand via Docker
   # Cara pakai: docker compose run --rm backup

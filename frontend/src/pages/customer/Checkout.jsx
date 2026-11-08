@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { customerApi } from '../../api';
 import toast from 'react-hot-toast';
-import { ArrowLeft, CreditCard, Banknote, ShieldCheck, Trash2, Plus, Minus, Send, AlertCircle } from 'lucide-react';
+import { ArrowLeft, CreditCard, Banknote, ShieldCheck, Send } from 'lucide-react';
+import QuantityStepper from '../../components/customer/QuantityStepper';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -119,189 +120,156 @@ export default function Checkout() {
     }
   };
 
+  const inputClass =
+    'w-full rounded-xl border border-line bg-canvas/50 px-4 py-3 text-base text-ink placeholder-faint transition focus:border-accent focus:outline-none sm:text-sm';
+
+  const paymentOptions = [
+    { value: 'CASH', title: 'Tunai (Cash)', hint: 'Bayar ke kasir setelah pesan', Icon: Banknote },
+    { value: 'CASHLESS', title: 'Cashless (QRIS)', hint: 'Scan QRIS / E-Wallet di HP', Icon: CreditCard },
+  ];
+
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 pb-16">
-      {/* Header */}
-      <header className="sticky top-0 z-30 bg-stone-900/90 backdrop-blur-md border-b border-stone-800 px-4 py-3.5">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
+    <div className="theme-light min-h-screen bg-canvas pb-16 text-ink">
+      <header className="sticky top-0 z-30 border-b border-line bg-canvas/90 px-5 py-3.5 backdrop-blur-md sm:px-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between">
           <button
             onClick={() => navigate('/menu')}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-stone-700 bg-stone-800 hover:bg-stone-700 text-xs font-semibold transition"
+            className="flex items-center gap-1.5 rounded-full py-1.5 pr-3 text-sm font-semibold text-soft transition hover:text-ink"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="h-4 w-4" />
             <span>Kembali</span>
           </button>
-          <h1 className="font-bold text-base text-white">Ringkasan Pesanan</h1>
-          <span className="px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-lg text-xs font-bold">
-            {selectedTable?.table_number}
+          <span className="rounded-full bg-accent px-3.5 py-1.5 text-sm font-bold text-on-accent">
+            Meja {selectedTable?.table_number}
           </span>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-6">
-        <form onSubmit={handleCheckout} className="space-y-6">
-          {/* Identitas Pemesan */}
-          <div className="bg-stone-900/90 border border-stone-800 rounded-2xl p-5 shadow-sm">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">
-              Nama Pemesan / Atas Nama
-            </label>
-            <input
-              type="text"
-              required
-              placeholder="Contoh: Pak Budi"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-stone-950 border border-stone-700 text-white placeholder-stone-500 focus:outline-none focus:border-amber-500 text-sm font-medium"
-            />
-          </div>
+      <main className="mx-auto max-w-5xl px-5 py-7 sm:px-8">
+        <h1 className="mb-6 text-4xl font-extrabold tracking-[-0.03em]">Ringkasan Pesanan</h1>
 
-          {/* Rincian Menu */}
-          <div className="bg-stone-900/90 border border-stone-800 rounded-2xl p-5 shadow-sm space-y-4">
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">Item Dipesan</h2>
-            <div className="divide-y divide-stone-800">
-              {Object.values(cart).map((item) => (
-                <div key={item.id} className="py-3.5 first:pt-0 last:pb-0 flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-bold text-sm text-stone-200">{item.name}</h4>
-                      <p className="text-xs text-amber-400 font-semibold">
-                        Rp {item.price.toLocaleString('id-ID')}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2 bg-stone-800 border border-stone-700 rounded-xl p-1">
-                      <button
-                        type="button"
-                        onClick={() => updateQuantity(item.id, -1)}
-                        className="p-1 rounded-lg bg-stone-700 hover:bg-stone-600 text-stone-200 transition"
-                      >
-                        <Minus className="w-3 h-3" />
-                      </button>
-                      <span className="text-xs font-bold px-2 text-white min-w-[20px] text-center">
-                        {item.quantity}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => updateQuantity(item.id, 1)}
-                        className="p-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 transition"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <input
-                    type="text"
-                    placeholder="Catatan khusus (misal: pedas, es sedikit)..."
-                    value={item.notes || ''}
-                    onChange={(e) => updateItemNotes(item.id, e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-lg bg-stone-950 border border-stone-800 text-xs text-stone-300 placeholder-stone-600 focus:outline-none focus:border-stone-700"
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-3 border-t border-stone-800">
+        <form onSubmit={handleCheckout} className="grid items-start gap-5 lg:grid-cols-[1fr_22rem]">
+          <div className="space-y-5">
+            <section className="rounded-2xl bg-panel p-5 sm:p-6">
+              <label htmlFor="customer-name" className="mb-2 block text-sm font-bold">
+                Nama Pemesan / Atas Nama
+              </label>
               <input
+                id="customer-name"
                 type="text"
-                placeholder="Catatan tambahan untuk kasir/dapur (opsional)..."
-                value={orderNotes}
-                onChange={(e) => setOrderNotes(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-stone-950 border border-stone-800 text-xs text-stone-300 placeholder-stone-600 focus:outline-none focus:border-stone-700"
+                required
+                placeholder="Contoh: Pak Budi"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                className={inputClass}
               />
-            </div>
+            </section>
+
+            <section className="rounded-2xl bg-panel p-5 sm:p-6">
+              <h2 className="mb-1 text-lg font-bold tracking-tight">Item Dipesan</h2>
+              <div className="divide-y divide-line">
+                {Object.values(cart).map((item) => (
+                  <div key={item.id} className="flex flex-col gap-2.5 py-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <h4 className="font-bold leading-snug">{item.name}</h4>
+                        <p className="text-sm text-soft">Rp {item.price.toLocaleString('id-ID')}</p>
+                      </div>
+                      <QuantityStepper
+                        name={item.name}
+                        quantity={item.quantity}
+                        onDecrease={() => updateQuantity(item.id, -1)}
+                        onIncrease={() => updateQuantity(item.id, 1)}
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Catatan khusus (misal: pedas, es sedikit)..."
+                      aria-label={`Catatan untuk ${item.name}`}
+                      value={item.notes || ''}
+                      onChange={(e) => updateItemNotes(item.id, e.target.value)}
+                      className="w-full border-b border-transparent bg-transparent py-1 text-base text-soft placeholder-faint transition focus:border-accent focus:outline-none sm:text-sm"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-t border-line pt-4">
+                <input
+                  type="text"
+                  placeholder="Catatan tambahan untuk kasir/dapur (opsional)..."
+                  aria-label="Catatan tambahan untuk kasir atau dapur"
+                  value={orderNotes}
+                  onChange={(e) => setOrderNotes(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            </section>
           </div>
 
-          {/* Pilihan Metode Pembayaran */}
-          <div className="bg-stone-900/90 border border-stone-800 rounded-2xl p-5 shadow-sm space-y-3">
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">Metode Pembayaran</h2>
+          <aside className="space-y-5 lg:sticky lg:top-20">
+            <section className="rounded-2xl bg-panel p-5 sm:p-6">
+              <h2 className="mb-3 text-lg font-bold tracking-tight">Metode Pembayaran</h2>
+              <div className="grid gap-2.5">
+                {paymentOptions.map(({ value, title, hint, Icon }) => {
+                  const active = paymentMethod === value;
+                  return (
+                    <label
+                      key={value}
+                      className={`flex cursor-pointer select-none items-center gap-3.5 rounded-xl p-3.5 transition focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink ${
+                        active ? 'bg-accent text-on-accent' : 'bg-raised hover:bg-raised-2'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="payment_method"
+                        value={value}
+                        checked={active}
+                        onChange={() => setPaymentMethod(value)}
+                        className="sr-only"
+                      />
+                      <Icon className="h-5 w-5 shrink-0" />
+                      <span>
+                        <span className="block text-sm font-bold">{title}</span>
+                        <span className={`block text-xs ${active ? 'text-movie' : 'text-soft'}`}>{hint}</span>
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </section>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Cash */}
-              <label
-                className={`p-4 rounded-xl border flex items-center gap-3.5 cursor-pointer transition select-none ${
-                  paymentMethod === 'CASH'
-                    ? 'border-amber-500 bg-amber-500/10 shadow-md shadow-amber-500/10'
-                    : 'border-stone-800 bg-stone-950 hover:bg-stone-850'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="payment_method"
-                  value="CASH"
-                  checked={paymentMethod === 'CASH'}
-                  onChange={() => setPaymentMethod('CASH')}
-                  className="hidden"
-                />
-                <div className={`p-2.5 rounded-xl ${paymentMethod === 'CASH' ? 'bg-amber-500 text-stone-950' : 'bg-stone-800 text-stone-400'}`}>
-                  <Banknote className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white">Tunai (Cash)</h4>
-                  <p className="text-[11px] text-stone-400">Bayar ke kasir setelah pesan</p>
-                </div>
-              </label>
-
-              {/* Cashless */}
-              <label
-                className={`p-4 rounded-xl border flex items-center gap-3.5 cursor-pointer transition select-none ${
-                  paymentMethod === 'CASHLESS'
-                    ? 'border-amber-500 bg-amber-500/10 shadow-md shadow-amber-500/10'
-                    : 'border-stone-800 bg-stone-950 hover:bg-stone-850'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="payment_method"
-                  value="CASHLESS"
-                  checked={paymentMethod === 'CASHLESS'}
-                  onChange={() => setPaymentMethod('CASHLESS')}
-                  className="hidden"
-                />
-                <div className={`p-2.5 rounded-xl ${paymentMethod === 'CASHLESS' ? 'bg-amber-500 text-stone-950' : 'bg-stone-800 text-stone-400'}`}>
-                  <CreditCard className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-white">Cashless (QRIS)</h4>
-                  <p className="text-[11px] text-stone-400">Scan QRIS / E-Wallet di HP</p>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          {/* Total & Submit Button */}
-          <div className="bg-stone-900 border border-stone-800 rounded-2xl p-5 shadow-lg space-y-4">
-            <div className="flex items-center justify-between text-base">
-              <span className="text-stone-400 font-medium">Total Pembayaran</span>
-              <span className="text-2xl font-black text-amber-400">
+            <section className="theme-dark rounded-2xl bg-canvas p-5 text-ink sm:p-6">
+              <p className="text-sm text-soft">Total Pembayaran</p>
+              <p className="mt-0.5 text-4xl font-extrabold tracking-[-0.03em]">
                 Rp {totalAmount.toLocaleString('id-ID')}
-              </span>
-            </div>
+              </p>
 
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs text-amber-400/90">
-              <ShieldCheck className="w-4 h-4 shrink-0 text-amber-400" />
-              <span>Meja {selectedTable?.table_number} telah dikonfirmasi dan akan dikunci saat pesanan dikirim.</span>
-            </div>
+              <p className="mt-4 flex gap-2 text-sm leading-snug text-soft">
+                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>Meja {selectedTable?.table_number} telah dikonfirmasi dan akan dikunci saat pesanan dikirim.</span>
+              </p>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className={`w-full py-4 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition shadow-lg ${
-                submitting
-                  ? 'bg-stone-800 text-stone-500 cursor-not-allowed'
-                  : 'bg-amber-500 text-stone-950 hover:bg-amber-400 shadow-amber-500/20 active:scale-95'
-              }`}
-            >
-              {submitting ? (
-                <span>Memproses Pesanan...</span>
-              ) : (
-                <>
-                  <Send className="w-4 h-4" />
-                  <span>Kirim Pesanan Sekarang</span>
-                </>
-              )}
-            </button>
-          </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className={`mt-5 flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm font-bold transition ${
+                  submitting
+                    ? 'cursor-not-allowed bg-raised text-faint'
+                    : 'bg-accent text-on-accent hover:bg-accent-hover active:scale-95'
+                }`}
+              >
+                {submitting ? (
+                  <span>Memproses Pesanan...</span>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" />
+                    <span>Kirim Pesanan Sekarang</span>
+                  </>
+                )}
+              </button>
+            </section>
+          </aside>
         </form>
       </main>
     </div>

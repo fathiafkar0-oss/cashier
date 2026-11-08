@@ -134,3 +134,7 @@ $RECYCLE.BIN/
 scratch/
 tmp/
 temp/
+
+# Backup lokal & file sementara
+backups/
+*.bak

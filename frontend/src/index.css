@@ -1,3 +1,82 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Tema gelap: portal karyawan */
+  :root,
+  .theme-dark {
+    --canvas: 16 22 26;
+    --panel: 24 32 40;
+    --raised: 35 46 58;
+    --raised-2: 47 60 76;
+    --line: 47 60 76;
+    --line-strong: 86 102 128;
+    --ink: 218 225 238;
+    --soft: 180 192 213;
+    --faint: 142 156 183;
+    --accent: 218 225 238;
+    --accent-hover: 180 192 213;
+    --on-accent: 16 22 26;
+    --accent-text: 180 192 213;
+    --success: 126 200 165;
+    --danger: 240 146 146;
+    --warn: 226 192 130;
+    --on-status: 16 22 26;
+  }
+
+  /* Tema terang: halaman pelanggan */
+  .theme-light {
+    --canvas: 218 225 238;
+    --panel: 245 247 251;
+    --raised: 232 237 245;
+    --raised-2: 218 225 238;
+    --line: 180 192 213;
+    --line-strong: 142 156 183;
+    --ink: 16 22 26;
+    --soft: 71 86 111;
+    --faint: 86 102 128;
+    --accent: 16 22 26;
+    --accent-hover: 47 60 76;
+    --on-accent: 218 225 238;
+    --accent-text: 47 60 76;
+    --success: 31 122 88;
+    --danger: 184 58 58;
+    --warn: 146 98 20;
+    --on-status: 245 247 251;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-feature-settings: 'tnum' 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--ink));
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

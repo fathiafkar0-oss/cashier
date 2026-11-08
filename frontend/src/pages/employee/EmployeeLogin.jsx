@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { employeeApi } from '../../api';
 import toast from 'react-hot-toast';
-import { Shield, Lock, User, KeyRound, Sparkles, ChefHat } from 'lucide-react';
+import { Lock, User, KeyRound, ChefHat } from 'lucide-react';
+import FoamEdge from '../../components/brand/FoamEdge';
 
 export default function EmployeeLogin() {
   const navigate = useNavigate();
@@ -46,73 +47,50 @@ export default function EmployeeLogin() {
     }
   };
 
+  const inputClass =
+    'w-full rounded-xl border border-line bg-panel py-3 pl-11 pr-4 text-base text-ink placeholder-faint transition focus:border-accent focus:outline-none sm:text-sm';
+
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-stone-900 border border-stone-800 rounded-3xl p-8 shadow-2xl space-y-6">
-        <div className="text-center space-y-2">
-          <div className="w-14 h-14 bg-amber-500/10 border border-amber-500/30 text-amber-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-            <Shield className="w-7 h-7" />
-          </div>
-          <h1 className="text-2xl font-black text-white tracking-tight">Portal Karyawan</h1>
-          <p className="text-xs text-stone-400">Restoran POS & Backoffice (Admin / Kasir)</p>
-        </div>
+    <div className="theme-dark flex min-h-screen flex-col bg-canvas text-ink">
+      <FoamEdge fill="#DAE1EE" className="rotate-180" />
 
-        {/* Quick Demo Fill Buttons */}
-        <div className="p-3 bg-stone-950/80 rounded-2xl border border-stone-800/80 space-y-2">
-          <p className="text-[11px] font-bold text-stone-400 uppercase tracking-wider text-center">
-            Pintasan Login Demo
-          </p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => fillDemo('admin')}
-              className="flex-1 py-2 px-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 text-xs font-bold transition flex items-center justify-center gap-1.5"
-            >
-              <KeyRound className="w-3.5 h-3.5" />
-              <span>Admin Demo</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => fillDemo('cashier')}
-              className="flex-1 py-2 px-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 text-xs font-bold transition flex items-center justify-center gap-1.5"
-            >
-              <ChefHat className="w-3.5 h-3.5" />
-              <span>Kasir Demo</span>
-            </button>
-          </div>
-        </div>
+      <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-5 py-10">
+        <h1 className="text-4xl font-extrabold tracking-[-0.03em]">Portal Karyawan</h1>
+        <p className="mt-2 text-sm text-soft">Restoran POS & Backoffice (Admin / Kasir)</p>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="mt-8 space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase text-stone-400 mb-1.5">
+            <label htmlFor="username" className="mb-1.5 block text-sm font-semibold text-soft">
               Username
             </label>
             <div className="relative">
-              <User className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
               <input
+                id="username"
                 type="text"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin / kasir"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-stone-950 border border-stone-700 text-white text-sm focus:outline-none focus:border-amber-500"
+                className={inputClass}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-stone-400 mb-1.5">
+            <label htmlFor="password" className="mb-1.5 block text-sm font-semibold text-soft">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
               <input
+                id="password"
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="password123"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-stone-950 border border-stone-700 text-white text-sm focus:outline-none focus:border-amber-500"
+                className={inputClass}
               />
             </div>
           </div>
@@ -120,26 +98,46 @@ export default function EmployeeLogin() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3.5 rounded-xl font-bold text-sm transition shadow-lg ${
+            className={`w-full rounded-full py-3.5 text-sm font-bold transition ${
               loading
-                ? 'bg-stone-800 text-stone-500 cursor-not-allowed'
-                : 'bg-amber-500 text-stone-950 hover:bg-amber-400 shadow-amber-500/20 active:scale-95'
+                ? 'cursor-not-allowed bg-raised text-faint'
+                : 'bg-accent text-on-accent hover:bg-accent-hover active:scale-95'
             }`}
           >
             {loading ? 'Memverifikasi...' : 'Masuk ke Portal'}
           </button>
         </form>
 
-        <div className="text-center pt-2">
-          <button
-            type="button"
-            onClick={() => navigate('/table-selection')}
-            className="text-xs text-stone-500 hover:text-amber-400 transition"
-          >
-            ← Beralih ke Tampilan Pelanggan (Meja)
-          </button>
+        <div className="mt-6">
+          <p className="text-center text-xs font-medium text-faint">Pintasan Login Demo</p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => fillDemo('admin')}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-line px-3 py-2.5 text-xs font-semibold text-soft transition hover:bg-raised hover:text-ink"
+            >
+              <KeyRound className="h-3.5 w-3.5" />
+              <span>Admin Demo</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => fillDemo('cashier')}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-line px-3 py-2.5 text-xs font-semibold text-soft transition hover:bg-raised hover:text-ink"
+            >
+              <ChefHat className="h-3.5 w-3.5" />
+              <span>Kasir Demo</span>
+            </button>
+          </div>
         </div>
-      </div>
+
+        <button
+          type="button"
+          onClick={() => navigate('/table-selection')}
+          className="mt-6 text-center text-sm text-faint transition hover:text-ink"
+        >
+          Beralih ke Tampilan Pelanggan (Meja)
+        </button>
+      </main>
     </div>
   );
 }

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { customerApi } from '../../api';
 import toast from 'react-hot-toast';
-import { ShoppingBag, Search, Plus, Minus, ArrowLeft, Utensils, Coffee, Cookie } from 'lucide-react';
+import { ShoppingBag, Search, Plus, ArrowLeft, Utensils } from 'lucide-react';
+import QuantityStepper from '../../components/customer/QuantityStepper';
 
 export default function MenuCatalog() {
   const navigate = useNavigate();
@@ -90,50 +91,46 @@ export default function MenuCatalog() {
   const totalPrice = Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 pb-28">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-30 bg-stone-900/90 backdrop-blur-md border-b border-stone-800 px-4 py-3">
-        <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
+    <div className="theme-light min-h-screen bg-canvas pb-32 text-ink">
+      <header className="sticky top-0 z-30 border-b border-line bg-canvas/90 px-5 pb-3 pt-4 backdrop-blur-md sm:px-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
           <button
             onClick={() => navigate('/table-selection')}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-stone-700 bg-stone-800 hover:bg-stone-700 text-xs font-semibold transition"
+            className="flex items-center gap-1.5 rounded-full py-1.5 pr-3 text-sm font-semibold text-soft transition hover:text-ink"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="h-4 w-4" />
             <span>Ganti Meja</span>
           </button>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-stone-400">Meja Anda:</span>
-            <span className="px-3 py-1 bg-amber-500/20 border border-amber-500/40 text-amber-400 rounded-lg font-extrabold text-sm">
-              {selectedTable?.table_number || '-'}
-            </span>
-          </div>
+          <span className="rounded-full bg-accent px-3.5 py-1.5 text-sm font-bold text-on-accent">
+            Meja {selectedTable?.table_number || '-'}
+          </span>
         </div>
 
-        {/* Search Bar */}
-        <div className="max-w-4xl mx-auto mt-3">
+        <div className="mx-auto mt-3 max-w-5xl">
           <div className="relative">
-            <Search className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
             <input
               type="text"
               placeholder="Cari masakan atau minuman favorit..."
+              aria-label="Cari menu"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-stone-950 border border-stone-800 text-sm text-stone-200 placeholder-stone-500 focus:outline-none focus:border-amber-500/60"
+              className="w-full rounded-full border border-transparent bg-panel py-3 pl-11 pr-4 text-base text-ink placeholder-faint transition focus:border-line-strong focus:outline-none sm:text-sm"
             />
           </div>
         </div>
 
-        {/* Category Pills */}
-        <div className="max-w-4xl mx-auto mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <div className="scrollbar-none mx-auto mt-3 flex max-w-5xl gap-1.5 overflow-x-auto">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
+              aria-pressed={selectedCategory === cat}
+              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition ${
                 selectedCategory === cat
-                  ? 'bg-amber-500 text-stone-950 shadow-md shadow-amber-500/20'
-                  : 'bg-stone-800/80 text-stone-300 hover:bg-stone-800 border border-stone-700/60'
+                  ? 'bg-accent text-on-accent'
+                  : 'text-soft hover:bg-panel hover:text-ink'
               }`}
             >
               {cat}
@@ -142,110 +139,95 @@ export default function MenuCatalog() {
         </div>
       </header>
 
-      {/* Menu Cards Grid */}
-      <main className="max-w-4xl mx-auto px-4 py-6">
+      <main className="mx-auto max-w-5xl px-5 py-6 sm:px-8">
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-64 rounded-2xl bg-stone-900 border border-stone-800 animate-pulse" />
+              <div key={i} className="h-32 animate-pulse rounded-2xl bg-raised sm:h-72" />
             ))}
           </div>
         ) : filteredMenus.length === 0 ? (
-          <div className="text-center py-16 text-stone-500">
-            <Utensils className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p className="text-sm">Tidak ada menu yang sesuai dengan pencarian.</p>
+          <div className="py-16 text-center">
+            <Utensils className="mx-auto mb-3 h-10 w-10 text-periwinkle" />
+            <p className="font-semibold">Tidak ada menu yang sesuai dengan pencarian.</p>
+            <p className="mt-1 text-sm text-soft">Coba kata lain atau pilih kategori Semua.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             {filteredMenus.map((menu) => {
               const inCartQty = cart[menu.id]?.quantity || 0;
               return (
-                <div
+                <article
                   key={menu.id}
-                  className="bg-stone-900/90 border border-stone-800 hover:border-stone-700 rounded-2xl overflow-hidden flex flex-col justify-between transition group shadow-sm"
+                  className={`group flex flex-row-reverse gap-3 rounded-2xl bg-panel p-3 sm:flex-col sm:gap-0 sm:overflow-hidden sm:p-0 ${
+                    inCartQty > 0 ? 'ring-2 ring-abyss' : ''
+                  }`}
                 >
-                  <div className="relative h-44 w-full bg-stone-950 overflow-hidden">
+                  <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-movie sm:aspect-[4/3] sm:h-auto sm:w-full sm:rounded-none">
                     <img
                       src={menu.image_url}
                       alt={menu.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
-                    <span className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-stone-950/80 backdrop-blur-md border border-stone-700 text-amber-400">
-                      {menu.category}
-                    </span>
                   </div>
 
-                  <div className="p-4 flex-1 flex flex-col justify-between">
+                  <div className="flex min-w-0 flex-1 flex-col justify-between sm:p-4">
                     <div>
-                      <h3 className="font-bold text-white text-base leading-snug group-hover:text-amber-400 transition">
-                        {menu.name}
-                      </h3>
-                      <p className="text-xs text-stone-400 mt-1 line-clamp-2 leading-relaxed">
+                      <p className="text-xs font-medium text-faint">{menu.category}</p>
+                      <h3 className="mt-0.5 text-base font-bold leading-snug tracking-tight">{menu.name}</h3>
+                      <p className="mt-1 line-clamp-2 text-sm leading-snug text-soft">
                         {menu.description || 'Hidangan lezat kaya bumbu istimewa.'}
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-stone-800/80 flex items-center justify-between">
-                      <span className="text-base font-extrabold text-amber-400">
+                    <div className="mt-2 flex items-center justify-between gap-2 sm:mt-4">
+                      <span className="whitespace-nowrap text-base font-extrabold tracking-tight">
                         Rp {menu.price.toLocaleString('id-ID')}
                       </span>
 
                       {inCartQty > 0 ? (
-                        <div className="flex items-center gap-2 bg-stone-800 border border-stone-700 rounded-xl p-1">
-                          <button
-                            onClick={() => removeFromCart(menu.id)}
-                            className="p-1 rounded-lg bg-stone-700 hover:bg-stone-600 text-stone-200 transition active:scale-90"
-                          >
-                            <Minus className="w-3.5 h-3.5" />
-                          </button>
-                          <span className="text-xs font-bold px-1.5 text-white min-w-[20px] text-center">
-                            {inCartQty}
-                          </span>
-                          <button
-                            onClick={() => addToCart(menu)}
-                            className="p-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 transition active:scale-90"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                        <QuantityStepper
+                          name={menu.name}
+                          quantity={inCartQty}
+                          onDecrease={() => removeFromCart(menu.id)}
+                          onIncrease={() => addToCart(menu)}
+                        />
                       ) : (
                         <button
                           onClick={() => addToCart(menu)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold transition shadow-md shadow-amber-500/10 active:scale-95"
+                          aria-label={`Pesan ${menu.name}`}
+                          className="flex h-10 items-center gap-1.5 rounded-full bg-accent px-4 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
                         >
-                          <Plus className="w-3.5 h-3.5" />
+                          <Plus className="h-4 w-4" />
                           <span>Pesan</span>
                         </button>
                       )}
                     </div>
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>
         )}
       </main>
 
-      {/* Floating Bottom Cart Bar */}
       {totalItems > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/90 to-transparent z-40">
-          <div className="max-w-4xl mx-auto bg-amber-500 text-stone-950 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4 animate-slideUp">
+        <div className="fixed bottom-0 left-0 right-0 z-40 p-4">
+          <div className="theme-dark mx-auto flex max-w-5xl animate-slideUp items-center justify-between gap-4 rounded-full bg-canvas py-2.5 pl-6 pr-2.5 text-ink shadow-[0_18px_40px_-12px_rgba(16,22,26,0.6)]">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-stone-950 text-amber-400 rounded-xl">
-                <ShoppingBag className="w-5 h-5" />
-              </div>
+              <ShoppingBag className="h-5 w-5 text-soft" />
               <div>
-                <p className="text-xs font-bold opacity-80">{totalItems} Menu di Keranjang</p>
-                <p className="text-lg font-black leading-tight">Rp {totalPrice.toLocaleString('id-ID')}</p>
+                <p className="text-xs text-soft">{totalItems} menu di keranjang</p>
+                <p className="text-lg font-extrabold leading-tight tracking-tight">Rp {totalPrice.toLocaleString('id-ID')}</p>
               </div>
             </div>
 
             <button
               onClick={() => navigate('/checkout')}
-              className="px-5 py-2.5 bg-stone-950 text-amber-400 hover:text-white rounded-xl text-sm font-bold transition flex items-center gap-2 active:scale-95 shadow-lg"
+              className="rounded-full bg-accent px-6 py-3 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
             >
-              <span>Lanjut Bayar</span>
+              Lanjut Bayar
             </button>
           </div>
         </div>

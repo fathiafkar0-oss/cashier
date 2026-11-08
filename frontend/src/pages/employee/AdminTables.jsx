@@ -100,14 +100,14 @@ export default function AdminTables() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-wide">Pengaturan Meja & Kapasitas</h1>
-          <p className="text-stone-400 text-sm mt-0.5">
+          <h1 className="text-2xl font-extrabold text-ink tracking-tight">Pengaturan Meja & Kapasitas</h1>
+          <p className="text-soft text-sm mt-0.5">
             Kelola tata letak nomor meja, kapasitas tamu, dan status ketersediaan live.
           </p>
         </div>
         <button
           onClick={openCreateModal}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black rounded-xl shadow-lg shadow-amber-500/10 transition"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent-hover text-on-accent font-extrabold rounded-xl shadow-lg transition"
         >
           <Plus className="w-4 h-4" />
           Tambah Meja Baru
@@ -117,10 +117,10 @@ export default function AdminTables() {
       {/* Tables Grid */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <RefreshCw className="w-8 h-8 text-amber-500 animate-spin" />
+          <RefreshCw className="w-8 h-8 text-accent-text animate-spin" />
         </div>
       ) : tables.length === 0 ? (
-        <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-12 text-center text-stone-500 text-xs">
+        <div className="bg-panel/60 border border-line rounded-xl p-12 text-center text-faint text-xs">
           Belum ada data meja restoran.
         </div>
       ) : (
@@ -131,42 +131,42 @@ export default function AdminTables() {
             return (
               <div
                 key={tbl.id}
-                className={`bg-stone-900/80 border rounded-2xl p-4 flex flex-col justify-between transition relative overflow-hidden ${
+                className={`bg-panel/80 border rounded-xl p-4 flex flex-col justify-between transition relative overflow-hidden ${
                   isAvailable 
-                    ? 'border-stone-800 hover:border-amber-500/40' 
-                    : 'border-rose-500/30 bg-rose-950/10'
+                    ? 'border-line hover:border-accent/40' 
+                    : 'border-danger/30 bg-danger/10'
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-stone-400">Meja</span>
+                    <span className="text-xs font-bold text-soft">Meja</span>
                     <button
                       onClick={() => openEditModal(tbl)}
-                      className="p-1 rounded text-stone-400 hover:text-white hover:bg-stone-800 transition"
+                      className="p-1 rounded text-soft hover:text-ink hover:bg-raised transition"
                       title="Edit Meja"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  <h3 className="text-xl font-black text-white">{tbl.table_number}</h3>
+                  <h3 className="text-xl font-extrabold text-ink">{tbl.table_number}</h3>
 
-                  <div className="flex items-center gap-1.5 text-stone-400 text-xs mt-1">
+                  <div className="flex items-center gap-1.5 text-soft text-xs mt-1">
                     <Users className="w-3.5 h-3.5" />
                     <span>Kapasitas: {tbl.capacity} Orang</span>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-stone-800/80 flex items-center justify-between">
-                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase ${
+                <div className="mt-4 pt-3 border-t border-line/80 flex items-center justify-between">
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-extrabold uppercase ${
                     isAvailable 
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                      : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                      ? 'bg-success/10 text-success border border-success/20' 
+                      : 'bg-danger/10 text-danger border border-danger/20'
                   }`}>
                     {isAvailable ? 'Kosong' : 'Terisi'}
                   </span>
 
-                  <span className="text-[10px] text-stone-500">ID #{tbl.id}</span>
+                  <span className="text-[11px] text-faint">ID #{tbl.id}</span>
                 </div>
               </div>
             );
@@ -176,37 +176,37 @@ export default function AdminTables() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-stone-900 border border-stone-800 rounded-2xl w-full max-w-sm p-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-abyss/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-panel border border-line rounded-xl w-full max-w-sm p-6 shadow-2xl relative">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-4 top-4 p-1.5 rounded-lg text-stone-400 hover:text-white hover:bg-stone-800"
+              className="absolute right-4 top-4 p-1.5 rounded-lg text-soft hover:text-ink hover:bg-raised"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-lg font-black text-white mb-1">
+            <h3 className="text-lg font-extrabold text-ink mb-1">
               {editingTable ? `Edit Meja ${editingTable.table_number}` : 'Tambah Meja Baru'}
             </h3>
-            <p className="text-stone-400 text-xs mb-4">
+            <p className="text-soft text-xs mb-4">
               Konfigurasi nomor meja dan jumlah kursi tamu.
             </p>
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
-                <label className="block text-stone-300 font-bold mb-1">Nomor / Nama Meja</label>
+                <label className="block text-soft font-bold mb-1">Nomor / Nama Meja</label>
                 <input
                   type="text"
                   required
                   placeholder="Contoh: Meja 11 / VIP 01"
                   value={tableNumber}
                   onChange={(e) => setTableNumber(e.target.value)}
-                  className="w-full px-3 py-2 bg-stone-800 border border-stone-700 rounded-xl text-stone-100 placeholder-stone-500 focus:outline-none focus:border-amber-500 font-bold"
+                  className="w-full px-3 py-2 bg-raised border border-line-strong rounded-xl text-ink placeholder-faint focus:outline-none focus:border-accent font-bold"
                 />
               </div>
 
               <div>
-                <label className="block text-stone-300 font-bold mb-1">Kapasitas (Jumlah Tamu)</label>
+                <label className="block text-soft font-bold mb-1">Kapasitas (Jumlah Tamu)</label>
                 <input
                   type="number"
                   min="1"
@@ -214,7 +214,7 @@ export default function AdminTables() {
                   required
                   value={capacity}
                   onChange={(e) => setCapacity(e.target.value)}
-                  className="w-full px-3 py-2 bg-stone-800 border border-stone-700 rounded-xl text-stone-100 focus:outline-none focus:border-amber-500 font-bold"
+                  className="w-full px-3 py-2 bg-raised border border-line-strong rounded-xl text-ink focus:outline-none focus:border-accent font-bold"
                 />
               </div>
 
@@ -222,14 +222,14 @@ export default function AdminTables() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-stone-800 text-stone-300 hover:bg-stone-700 font-bold transition"
+                  className="px-4 py-2 rounded-xl bg-raised text-soft hover:bg-raised-2 font-bold transition"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-black shadow-lg shadow-amber-500/10 transition"
+                  className="px-5 py-2 rounded-xl bg-accent hover:bg-accent-hover text-on-accent font-extrabold shadow-lg transition"
                 >
                   {saving ? 'Menyimpan...' : 'Simpan'}
                 </button>

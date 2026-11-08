@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { customerApi } from '../../api';
 import toast from 'react-hot-toast';
-import { Users, AlertTriangle, CheckCircle, ArrowRight, Utensils, RefreshCw } from 'lucide-react';
+import { Users, AlertTriangle, ArrowRight, Utensils, RefreshCw } from 'lucide-react';
+import FoamEdge from '../../components/brand/FoamEdge';
 
 export default function TableSelection() {
   const navigate = useNavigate();
@@ -52,125 +53,109 @@ export default function TableSelection() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex flex-col justify-between">
-      {/* Top Header */}
-      <header className="border-b border-stone-800 bg-stone-900/80 backdrop-blur-md px-6 py-4 sticky top-0 z-30 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-500">
-            <Utensils className="w-6 h-6" />
+    <div className="theme-light flex min-h-screen flex-col bg-canvas text-ink">
+      <header className="theme-dark relative bg-canvas text-ink">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 pt-5 sm:px-8">
+          <div className="flex items-center gap-2.5">
+            <Utensils className="h-5 w-5 text-soft" />
+            <span className="text-sm font-bold">Resto Self-Order</span>
           </div>
-          <div>
-            <h1 className="font-bold text-lg text-white">Resto Self-Order</h1>
-            <p className="text-xs text-stone-400">Pilih nomor meja tempat Anda duduk</p>
-          </div>
+          <button
+            onClick={fetchTables}
+            className="grid h-10 w-10 place-items-center rounded-full text-soft transition hover:bg-raised hover:text-ink"
+            title="Segarkan Meja"
+            aria-label="Segarkan daftar meja"
+          >
+            <RefreshCw className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
+          </button>
         </div>
 
-        <button 
-          onClick={fetchTables} 
-          className="p-2 hover:bg-stone-800 rounded-lg text-stone-400 hover:text-white transition"
-          title="Segarkan Meja"
-        >
-          <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin text-amber-400' : ''}`} />
-        </button>
+        <div className="mx-auto max-w-5xl px-5 pb-2 pt-10 sm:px-8 sm:pt-14">
+          <h1 className="max-w-xl text-[2.625rem] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+            Anda duduk di meja mana?
+          </h1>
+          <p className="mt-4 max-w-md text-base leading-relaxed text-soft">
+            Pilih meja Anda, lalu pesan langsung dari HP tanpa perlu antre.
+          </p>
+        </div>
+
+        <FoamEdge />
       </header>
 
-      {/* Main Grid Meja */}
-      <main className="max-w-4xl mx-auto w-full px-4 py-8 flex-1">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-white">Daftar Meja Makan</h2>
-            <p className="text-sm text-stone-400">Silakan pilih meja yang sedang Anda tempati</p>
-          </div>
-          <div className="flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1.5 text-emerald-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-5 pb-16 pt-6 sm:px-8">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <h2 className="text-xl font-bold tracking-tight">Denah meja</h2>
+          <div className="flex items-center gap-4 text-sm font-medium">
+            <span className="flex items-center gap-1.5 text-success">
+              <span className="h-2.5 w-2.5 rounded-full bg-success" />
               Tersedia
             </span>
-            <span className="flex items-center gap-1.5 text-stone-500">
-              <span className="w-2.5 h-2.5 rounded-full bg-stone-600"></span>
+            <span className="flex items-center gap-1.5 text-faint">
+              <span className="h-2.5 w-2.5 rounded-full border border-dashed border-faint" />
               Terisi
             </span>
           </div>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {[...Array(10)].map((_, i) => (
-              <div key={i} className="h-32 rounded-2xl bg-stone-900 animate-pulse border border-stone-800" />
+              <div key={i} className="h-32 animate-pulse rounded-2xl bg-raised" />
             ))}
           </div>
+        ) : tables.length === 0 ? (
+          <div className="rounded-2xl bg-panel px-6 py-14 text-center">
+            <p className="font-semibold">Daftar meja belum tersedia</p>
+            <button onClick={fetchTables} className="mt-3 text-sm font-semibold text-accent-text underline underline-offset-4">
+              Muat ulang meja
+            </button>
+          </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {tables.map((table) => {
-              const isAvailable = table.status === 'AVAILABLE';
-              return (
-                <button
-                  key={table.id}
-                  disabled={!isAvailable}
-                  onClick={() => handleSelectTable(table)}
-                  className={`relative p-5 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between h-36 ${
-                    isAvailable
-                      ? 'bg-stone-900/90 border-stone-700/80 hover:border-amber-500/80 hover:bg-stone-850 hover:shadow-lg hover:shadow-amber-500/10 cursor-pointer active:scale-95'
-                      : 'bg-stone-900/30 border-stone-800 opacity-50 cursor-not-allowed'
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <span className="text-xl font-extrabold text-white">
-                      {table.table_number}
-                    </span>
-                    <span
-                      className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${
-                        isAvailable
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                          : 'bg-stone-800 border-stone-700 text-stone-400'
-                      }`}
-                    >
-                      {isAvailable ? 'Kosong' : 'Terisi'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-xs text-stone-400">
-                    <Users className="w-3.5 h-3.5" />
-                    <span>Kapasitas {table.capacity} Orang</span>
-                  </div>
-                </button>
-              );
-            })}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {tables.map((table) => (
+              <TableTile key={table.id} table={table} onSelect={handleSelectTable} />
+            ))}
           </div>
         )}
       </main>
 
       {/* Modal Dialog Konfirmasi Table Lock (Wajib Persyaratan Rubrik POS) */}
       {isModalOpen && selectedTable && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-stone-900 border border-stone-700 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-            <div className="flex items-center gap-3 mb-4 text-amber-400">
-              <div className="p-3 bg-amber-500/10 rounded-2xl border border-amber-500/30">
-                <AlertTriangle className="w-7 h-7" />
-              </div>
+        <div className="fixed inset-0 z-50 flex animate-fadeIn items-end justify-center bg-abyss/70 backdrop-blur-sm sm:items-center sm:p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="table-confirm-title"
+            className="w-full max-w-md animate-slideUp rounded-t-3xl bg-panel p-6 sm:rounded-3xl sm:p-7"
+          >
+            <div className="mb-5 flex items-center gap-4">
+              <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-accent text-xl font-extrabold text-on-accent">
+                {selectedTable.table_number}
+              </span>
               <div>
-                <h3 className="text-lg font-bold text-white">PERHATIAN</h3>
-                <p className="text-xs text-amber-400/80">Konfirmasi Meja {selectedTable.table_number}</p>
+                <h3 id="table-confirm-title" className="text-xl font-bold tracking-tight">Perhatian</h3>
+                <p className="text-sm text-soft">Konfirmasi Meja {selectedTable.table_number}</p>
               </div>
             </div>
 
-            <div className="bg-stone-950/70 border border-stone-800 rounded-2xl p-4 text-sm text-stone-300 leading-relaxed mb-5">
-              <p className="mb-2">
-                Pastikan Anda sudah berada di meja yang benar yaitu <strong>{selectedTable.table_number}</strong>.
-              </p>
-              <p className="text-stone-400 text-xs">
-                Setelah transaksi dibuat, Anda <strong className="text-amber-400">tidak diperbolehkan berpindah meja</strong> selama transaksi berlangsung agar pesanan diantar dengan tepat.
-              </p>
-            </div>
+            <p className="mb-2 text-sm leading-relaxed">
+              Pastikan Anda sudah berada di meja yang benar, yaitu <strong>{selectedTable.table_number}</strong>.
+            </p>
+            <p className="mb-5 flex gap-2 text-sm leading-relaxed text-soft">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warn" />
+              <span>
+                Setelah transaksi dibuat, Anda <strong className="text-ink">tidak diperbolehkan berpindah meja</strong> selama transaksi berlangsung agar pesanan diantar dengan tepat.
+              </span>
+            </p>
 
-            <label className="flex items-start gap-3 p-3.5 rounded-xl border border-stone-700 bg-stone-850 hover:bg-stone-800/80 cursor-pointer transition select-none mb-6">
+            <label className="mb-6 flex cursor-pointer select-none items-start gap-3 rounded-xl bg-raised p-4 transition hover:bg-raised-2">
               <input
                 type="checkbox"
                 checked={confirmed}
                 onChange={(e) => setConfirmed(e.target.checked)}
-                className="mt-1 w-4 h-4 rounded border-stone-600 text-amber-500 focus:ring-amber-500 bg-stone-900"
+                className="mt-0.5 h-5 w-5 shrink-0 accent-abyss"
               />
-              <span className="text-xs text-stone-200 leading-normal">
+              <span className="text-sm leading-normal">
                 Saya sudah memastikan nomor meja saya benar dan tidak akan berpindah meja selama transaksi berlangsung.
               </span>
             </label>
@@ -179,7 +164,7 @@ export default function TableSelection() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 py-3 px-4 rounded-xl border border-stone-700 text-stone-300 font-semibold text-sm hover:bg-stone-800 transition"
+                className="flex-1 rounded-full border border-line-strong px-4 py-3.5 text-sm font-semibold transition hover:bg-raised"
               >
                 Batal
               </button>
@@ -187,19 +172,61 @@ export default function TableSelection() {
                 type="button"
                 disabled={!confirmed}
                 onClick={handleProceedToMenu}
-                className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition ${
+                className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-3.5 text-sm font-bold transition ${
                   confirmed
-                    ? 'bg-amber-500 text-stone-950 hover:bg-amber-400 shadow-lg shadow-amber-500/20 active:scale-95'
-                    : 'bg-stone-800 text-stone-500 cursor-not-allowed'
+                    ? 'bg-accent text-on-accent hover:bg-accent-hover active:scale-95'
+                    : 'cursor-not-allowed bg-raised text-faint'
                 }`}
               >
                 <span>Lanjutkan</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+/** Meja dilihat dari atas: jumlah kursi mengikuti kapasitas meja. */
+function TableTile({ table, onSelect }) {
+  const isAvailable = table.status === 'AVAILABLE';
+  const seats = Math.min(table.capacity || 0, 12);
+  const topSeats = Math.ceil(seats / 2);
+  const bottomSeats = seats - topSeats;
+  const seatClass = isAvailable ? 'bg-periwinkle group-hover:bg-abyss' : 'bg-line';
+
+  const renderSeats = (count) => (
+    <div className="flex h-2 justify-center gap-1.5">
+      {[...Array(count)].map((_, i) => (
+        <span key={i} className={`h-2 w-6 max-w-[18%] rounded-full transition ${seatClass}`} />
+      ))}
+    </div>
+  );
+
+  return (
+    <button
+      disabled={!isAvailable}
+      onClick={() => onSelect(table)}
+      aria-label={`Meja ${table.table_number}, kapasitas ${table.capacity} orang, ${isAvailable ? 'tersedia' : 'terisi'}`}
+      className={`group flex w-full flex-col gap-1.5 text-center ${isAvailable ? 'active:scale-95' : 'cursor-not-allowed'} transition-transform`}
+    >
+      {renderSeats(topSeats)}
+      <div
+        className={`flex h-24 flex-col items-center justify-center rounded-2xl transition ${
+          isAvailable
+            ? 'bg-panel group-hover:bg-abyss group-hover:text-timid'
+            : 'border border-dashed border-line-strong text-faint'
+        }`}
+      >
+        <span className="text-2xl font-extrabold tracking-tight">{table.table_number}</span>
+        <span className="mt-0.5 flex items-center gap-1 text-xs font-medium opacity-75">
+          <Users className="h-3.5 w-3.5" />
+          {isAvailable ? `${table.capacity} orang` : 'Terisi'}
+        </span>
+      </div>
+      {renderSeats(bottomSeats)}
+    </button>
   );
 }

@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-// Customer Pages
+// Landing & Customer Pages
+import Landing from './pages/Landing';
 import TableSelection from './pages/customer/TableSelection';
 import MenuCatalog from './pages/customer/MenuCatalog';
 import Checkout from './pages/customer/Checkout';
@@ -34,32 +35,32 @@ export default function App() {
         toastOptions={{ 
           duration: 3500,
           style: {
-            background: 'rgba(28, 26, 24, 0.95)',
+            background: 'rgba(24, 32, 40, 0.96)',
             backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.7)',
-            color: '#F4F3ED',
+            border: '1px solid rgba(142, 156, 183, 0.35)',
+            boxShadow: '0 20px 45px -10px rgba(16, 22, 26, 0.55)',
+            color: '#DAE1EE',
             padding: '12px 18px',
-            borderRadius: '1rem',
+            borderRadius: '0.875rem',
             fontSize: '0.85rem',
             fontWeight: '600',
           },
           success: {
             iconTheme: {
-              primary: '#10b981',
-              secondary: '#1c1a18',
+              primary: '#7EC8A5',
+              secondary: '#10161A',
             },
             style: {
-              border: '1px solid rgba(16, 185, 129, 0.3)',
+              border: '1px solid rgba(126, 200, 165, 0.4)',
             },
           },
           error: {
             iconTheme: {
-              primary: '#f43f5e',
-              secondary: '#1c1a18',
+              primary: '#F09292',
+              secondary: '#10161A',
             },
             style: {
-              border: '1px solid rgba(244, 63, 94, 0.3)',
+              border: '1px solid rgba(240, 146, 146, 0.4)',
             },
           },
         }} 
@@ -67,7 +68,7 @@ export default function App() {
 
       <Routes>
         {/* Customer Self-Ordering Flow */}
-        <Route path="/" element={<Navigate to="/table-selection" replace />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/table-selection" element={<TableSelection />} />
         <Route path="/menu" element={<MenuCatalog />} />
         <Route path="/checkout" element={<Checkout />} />
