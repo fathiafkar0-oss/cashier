@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { customerApi } from '../../api';
 import toast from 'react-hot-toast';
 import { Users, AlertTriangle, ArrowRight, Utensils, RefreshCw } from 'lucide-react';
-import FoamEdge from '../../components/brand/FoamEdge';
+import Ornament from '../../components/brand/Ornament';
 
 export default function TableSelection() {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ export default function TableSelection() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 pt-5 sm:px-8">
           <div className="flex items-center gap-2.5">
             <Utensils className="h-5 w-5 text-soft" />
-            <span className="text-sm font-bold">Resto Self-Order</span>
+            <span className="text-sm font-bold">MICRODINE</span>
           </div>
           <button
             onClick={fetchTables}
@@ -71,7 +71,7 @@ export default function TableSelection() {
         </div>
 
         <div className="mx-auto max-w-5xl px-5 pb-2 pt-10 sm:px-8 sm:pt-14">
-          <h1 className="max-w-xl text-[2.625rem] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+          <h1 className="max-w-xl text-[2.625rem] font-extrabold leading-[1.05] tracking-normal sm:text-6xl">
             Anda duduk di meja mana?
           </h1>
           <p className="mt-4 max-w-md text-base leading-relaxed text-soft">
@@ -79,7 +79,7 @@ export default function TableSelection() {
           </p>
         </div>
 
-        <FoamEdge />
+        <Ornament className="mx-auto max-w-5xl px-5 py-7 sm:px-8" />
       </header>
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-5 pb-16 pt-6 sm:px-8">
@@ -164,7 +164,7 @@ export default function TableSelection() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 rounded-full border border-line-strong px-4 py-3.5 text-sm font-semibold transition hover:bg-raised"
+                className="flex-1 rounded-md border border-line-strong px-4 py-3.5 text-sm font-semibold transition hover:bg-raised"
               >
                 Batal
               </button>
@@ -172,7 +172,7 @@ export default function TableSelection() {
                 type="button"
                 disabled={!confirmed}
                 onClick={handleProceedToMenu}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-3.5 text-sm font-bold transition ${
+                className={`flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-3.5 text-sm font-bold transition ${
                   confirmed
                     ? 'bg-accent text-on-accent hover:bg-accent-hover active:scale-95'
                     : 'cursor-not-allowed bg-raised text-faint'

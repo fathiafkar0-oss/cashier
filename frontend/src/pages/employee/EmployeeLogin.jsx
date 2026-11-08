@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { employeeApi } from '../../api';
 import toast from 'react-hot-toast';
 import { Lock, User, KeyRound, ChefHat } from 'lucide-react';
-import FoamEdge from '../../components/brand/FoamEdge';
+import Ornament from '../../components/brand/Ornament';
 
 export default function EmployeeLogin() {
   const navigate = useNavigate();
@@ -52,10 +52,11 @@ export default function EmployeeLogin() {
 
   return (
     <div className="theme-dark flex min-h-screen flex-col bg-canvas text-ink">
-      <FoamEdge fill="#DAE1EE" className="rotate-180" />
-
+      
       <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-5 py-10">
-        <h1 className="text-4xl font-extrabold tracking-[-0.03em]">Portal Karyawan</h1>
+        <p className="font-display text-2xl font-semibold tracking-[0.2em] text-accent">MICRODINE</p>
+        <Ornament className="mb-10 mt-4" />
+        <h1 className="text-4xl font-extrabold tracking-normal">Portal Karyawan</h1>
         <p className="mt-2 text-sm text-soft">Restoran POS & Backoffice (Admin / Kasir)</p>
 
         <form onSubmit={handleLogin} className="mt-8 space-y-4">
@@ -98,7 +99,7 @@ export default function EmployeeLogin() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full rounded-full py-3.5 text-sm font-bold transition ${
+            className={`w-full rounded-md py-3.5 text-sm font-bold transition ${
               loading
                 ? 'cursor-not-allowed bg-raised text-faint'
                 : 'bg-accent text-on-accent hover:bg-accent-hover active:scale-95'
@@ -114,7 +115,7 @@ export default function EmployeeLogin() {
             <button
               type="button"
               onClick={() => fillDemo('admin')}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-line px-3 py-2.5 text-xs font-semibold text-soft transition hover:bg-raised hover:text-ink"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-line px-3 py-2.5 text-xs font-semibold text-soft transition hover:bg-raised hover:text-ink"
             >
               <KeyRound className="h-3.5 w-3.5" />
               <span>Admin Demo</span>
@@ -122,7 +123,7 @@ export default function EmployeeLogin() {
             <button
               type="button"
               onClick={() => fillDemo('cashier')}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-line px-3 py-2.5 text-xs font-semibold text-soft transition hover:bg-raised hover:text-ink"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-line px-3 py-2.5 text-xs font-semibold text-soft transition hover:bg-raised hover:text-ink"
             >
               <ChefHat className="h-3.5 w-3.5" />
               <span>Kasir Demo</span>

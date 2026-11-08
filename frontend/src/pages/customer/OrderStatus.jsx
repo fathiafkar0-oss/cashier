@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { customerApi } from '../../api';
 import toast from 'react-hot-toast';
 import { CheckCircle2, QrCode, Banknote, ArrowRight, RefreshCw, AlertCircle, ChefHat, Sparkles } from 'lucide-react';
-import FoamEdge from '../../components/brand/FoamEdge';
+import Ornament from '../../components/brand/Ornament';
 
 export default function OrderStatus() {
   const { id } = useParams();
@@ -76,7 +76,7 @@ export default function OrderStatus() {
         <h2 className="text-xl font-bold">Pesanan Tidak Ditemukan</h2>
         <button
           onClick={() => navigate('/table-selection')}
-          className="mt-5 rounded-full bg-accent px-6 py-3 text-sm font-bold text-on-accent"
+          className="mt-5 rounded-md bg-accent px-6 py-3 text-sm font-bold text-on-accent"
         >
           Kembali ke Pemilihan Meja
         </button>
@@ -134,11 +134,11 @@ export default function OrderStatus() {
         <div className="mx-auto max-w-xl px-5 pb-2 pt-7">
           <div className="flex items-center justify-between text-sm">
             <span className="font-semibold text-soft">Kode {order.order_code}</span>
-            <span className="rounded-full bg-raised px-3.5 py-1.5 font-bold">Meja {order.table_number}</span>
+            <span className="rounded-md bg-raised px-3.5 py-1.5 font-bold">Meja {order.table_number}</span>
           </div>
-          <h1 className="mt-8 text-[2.5rem] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-5xl">{headline}</h1>
+          <h1 className="mt-8 text-[2.5rem] font-extrabold leading-[1.05] tracking-normal sm:text-5xl">{headline}</h1>
         </div>
-        <FoamEdge />
+        <Ornament className="mx-auto max-w-5xl px-5 py-7 sm:px-8" />
       </header>
 
       <div className="mx-auto max-w-xl space-y-4 px-5">
@@ -206,7 +206,7 @@ export default function OrderStatus() {
                   <button
                     onClick={handleSimulateCashlessSuccess}
                     disabled={simulating}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-success px-4 py-3.5 text-sm font-bold text-on-status transition hover:opacity-90 active:scale-95"
+                    className="flex w-full items-center justify-center gap-2 rounded-md bg-success px-4 py-3.5 text-sm font-bold text-on-status transition hover:opacity-90 active:scale-95"
                   >
                     <CheckCircle2 className="h-4 w-4" />
                     <span>{simulating ? 'Memverifikasi...' : 'Simulasikan Pembayaran Berhasil (Demo Testing)'}</span>
@@ -214,7 +214,7 @@ export default function OrderStatus() {
 
                   <button
                     onClick={handleSwitchToCash}
-                    className="w-full rounded-full border border-line-strong px-4 py-3 text-sm font-semibold text-soft transition hover:bg-raised hover:text-ink"
+                    className="w-full rounded-md border border-line-strong px-4 py-3 text-sm font-semibold text-soft transition hover:bg-raised hover:text-ink"
                   >
                     Ganti ke Pembayaran Tunai (Cash di Kasir)
                   </button>
@@ -252,7 +252,7 @@ export default function OrderStatus() {
               localStorage.removeItem('selected_table');
               navigate('/table-selection');
             }}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-4 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
+            className="flex w-full items-center justify-center gap-2 rounded-md bg-accent py-4 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
           >
             <span>Pesan Menu Baru Lagi</span>
             <ArrowRight className="h-4 w-4" />

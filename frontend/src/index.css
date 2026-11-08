@@ -3,47 +3,47 @@
 @tailwind utilities;
 
 @layer base {
-  /* Tema gelap: portal karyawan */
+  /* Tema terang (default): latar Ethereal Ivory, teks Velvet Obsidian, aksen Regal Navy */
   :root,
-  .theme-dark {
-    --canvas: 16 22 26;
-    --panel: 24 32 40;
-    --raised: 35 46 58;
-    --raised-2: 47 60 76;
-    --line: 47 60 76;
-    --line-strong: 86 102 128;
-    --ink: 218 225 238;
-    --soft: 180 192 213;
-    --faint: 142 156 183;
-    --accent: 218 225 238;
-    --accent-hover: 180 192 213;
-    --on-accent: 16 22 26;
-    --accent-text: 180 192 213;
-    --success: 126 200 165;
-    --danger: 240 146 146;
-    --warn: 226 192 130;
-    --on-status: 16 22 26;
+  .theme-light {
+    --canvas: 247 235 224;
+    --panel: 253 248 242;
+    --raised: 241 228 214;
+    --raised-2: 233 216 199;
+    --line: 226 208 190;
+    --line-strong: 196 170 140;
+    --ink: 23 23 33;
+    --soft: 58 58 76;
+    --faint: 104 98 112;
+    --accent: 10 29 75;
+    --accent-hover: 22 44 104;
+    --on-accent: 247 235 224;
+    --accent-text: 10 29 75;
+    --success: 38 104 74;
+    --danger: 158 14 24;
+    --warn: 133 94 26;
+    --on-status: 253 248 242;
   }
 
-  /* Tema terang: halaman pelanggan */
-  .theme-light {
-    --canvas: 218 225 238;
-    --panel: 245 247 251;
-    --raised: 232 237 245;
-    --raised-2: 218 225 238;
-    --line: 180 192 213;
-    --line-strong: 142 156 183;
-    --ink: 16 22 26;
-    --soft: 71 86 111;
-    --faint: 86 102 128;
-    --accent: 16 22 26;
-    --accent-hover: 47 60 76;
-    --on-accent: 218 225 238;
-    --accent-text: 47 60 76;
-    --success: 31 122 88;
-    --danger: 184 58 58;
-    --warn: 146 98 20;
-    --on-status: 245 247 251;
+  /* Tema gelap: Regal Navy dengan aksen Opulent Gold (header, sidebar, login) */
+  .theme-dark {
+    --canvas: 10 29 75;
+    --panel: 14 36 88;
+    --raised: 22 46 104;
+    --raised-2: 32 58 120;
+    --line: 40 64 124;
+    --line-strong: 150 128 92;
+    --ink: 247 235 224;
+    --soft: 226 212 196;
+    --faint: 190 178 166;
+    --accent: 204 158 74;
+    --accent-hover: 221 183 110;
+    --on-accent: 23 23 33;
+    --accent-text: 204 158 74;
+    --success: 140 200 160;
+    --danger: 240 130 130;
+    --warn: 226 190 120;
+    --on-status: 23 23 33;
   }
 
   html {
@@ -52,8 +52,23 @@
   }
 
   body {
+    font-family: Jost, ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: 'tnum' 1;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Judul memakai serif klasik di seluruh aplikasi */
+  h1,
+  h2,
+  h3 {
+    font-family: 'Cormorant Garamond', ui-serif, Georgia, serif;
+    letter-spacing: 0;
+  }
+
+  /* Cormorant memiliki x-height kecil: samakan tinggi hurufnya dengan Jost di halaman aplikasi */
+  .theme-light :is(h1, h2, h3),
+  .theme-dark :is(h1, h2, h3) {
+    font-size-adjust: 0.5;
   }
 
   :focus-visible {
@@ -63,6 +78,11 @@
 }
 
 @layer utilities {
+  .font-script {
+    font-style: italic;
+    font-weight: 500;
+  }
+
   .scrollbar-none {
     scrollbar-width: none;
   }

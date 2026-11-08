@@ -134,19 +134,19 @@ export default function Checkout() {
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <button
             onClick={() => navigate('/menu')}
-            className="flex items-center gap-1.5 rounded-full py-1.5 pr-3 text-sm font-semibold text-soft transition hover:text-ink"
+            className="flex items-center gap-1.5 rounded-md py-1.5 pr-3 text-sm font-semibold text-soft transition hover:text-ink"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Kembali</span>
           </button>
-          <span className="rounded-full bg-accent px-3.5 py-1.5 text-sm font-bold text-on-accent">
+          <span className="rounded-md bg-accent px-3.5 py-1.5 text-sm font-bold text-on-accent">
             Meja {selectedTable?.table_number}
           </span>
         </div>
       </header>
 
       <main className="mx-auto max-w-5xl px-5 py-7 sm:px-8">
-        <h1 className="mb-6 text-4xl font-extrabold tracking-[-0.03em]">Ringkasan Pesanan</h1>
+        <h1 className="mb-6 text-4xl font-extrabold tracking-normal">Ringkasan Pesanan</h1>
 
         <form onSubmit={handleCheckout} className="grid items-start gap-5 lg:grid-cols-[1fr_22rem]">
           <div className="space-y-5">
@@ -241,7 +241,7 @@ export default function Checkout() {
 
             <section className="theme-dark rounded-2xl bg-canvas p-5 text-ink sm:p-6">
               <p className="text-sm text-soft">Total Pembayaran</p>
-              <p className="mt-0.5 text-4xl font-extrabold tracking-[-0.03em]">
+              <p className="mt-0.5 text-4xl font-extrabold tracking-normal">
                 Rp {totalAmount.toLocaleString('id-ID')}
               </p>
 
@@ -253,7 +253,7 @@ export default function Checkout() {
               <button
                 type="submit"
                 disabled={submitting}
-                className={`mt-5 flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm font-bold transition ${
+                className={`mt-5 flex w-full items-center justify-center gap-2 rounded-md py-4 text-sm font-bold transition ${
                   submitting
                     ? 'cursor-not-allowed bg-raised text-faint'
                     : 'bg-accent text-on-accent hover:bg-accent-hover active:scale-95'

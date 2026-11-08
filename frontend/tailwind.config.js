@@ -11,21 +11,33 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['Cinzel', 'ui-serif', 'Georgia', 'serif'],
-        script: ['"Great Vibes"', 'cursive'],
+        sans: ['Jost', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Cormorant Garamond"', 'ui-serif', 'Georgia', 'serif'],
+        script: ['"Cormorant Garamond"', 'ui-serif', 'Georgia', 'serif'],
+      },
+      borderRadius: {
+        sm: '2px',
+        DEFAULT: '3px',
+        md: '4px',
+        lg: '4px',
+        xl: '6px',
+        '2xl': '8px',
+        '3xl': '10px',
       },
       colors: {
-        // Halaman awal (landing)
-        navy: { DEFAULT: '#0B1A2E', deep: '#071222', soft: '#132842' },
-        gold: { DEFAULT: '#E9C89B', soft: '#F3DDBC' },
-        // Palet sumber
-        abyss: '#10161A',
-        dana: '#566680',
-        periwinkle: '#8E9CB7',
-        movie: '#B4C0D5',
-        timid: '#DAE1EE',
-        foam: '#F5F7FB',
+        // Palet klasik MICRODINE
+        navy: { DEFAULT: '#0A1D4B', deep: '#171721', soft: '#102760' },
+        crimson: { DEFAULT: '#9E0E18', dark: '#7E0B13' },
+        gold: { DEFAULT: '#CC9E4A', soft: '#DDB76E' },
+        ivory: { DEFAULT: '#F7EBE0', paper: '#FDF8F2', line: '#E2D0BE' },
+        obsidian: '#171721',
+        // Nama lama dipetakan ke palet baru agar kelas lama tetap konsisten
+        abyss: '#171721',
+        dana: '#0A1D4B',
+        periwinkle: '#2E4A8F',
+        movie: '#E2D0BE',
+        timid: '#F7EBE0',
+        foam: '#FDF8F2',
         // Token semantik
         canvas: token('canvas'),
         panel: token('panel'),

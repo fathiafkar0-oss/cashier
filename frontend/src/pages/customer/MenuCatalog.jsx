@@ -96,13 +96,13 @@ export default function MenuCatalog() {
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
           <button
             onClick={() => navigate('/table-selection')}
-            className="flex items-center gap-1.5 rounded-full py-1.5 pr-3 text-sm font-semibold text-soft transition hover:text-ink"
+            className="flex items-center gap-1.5 rounded-md py-1.5 pr-3 text-sm font-semibold text-soft transition hover:text-ink"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Ganti Meja</span>
           </button>
 
-          <span className="rounded-full bg-accent px-3.5 py-1.5 text-sm font-bold text-on-accent">
+          <span className="rounded-md bg-accent px-3.5 py-1.5 text-sm font-bold text-on-accent">
             Meja {selectedTable?.table_number || '-'}
           </span>
         </div>
@@ -116,7 +116,7 @@ export default function MenuCatalog() {
               aria-label="Cari menu"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-full border border-transparent bg-panel py-3 pl-11 pr-4 text-base text-ink placeholder-faint transition focus:border-line-strong focus:outline-none sm:text-sm"
+              className="w-full rounded-md border border-transparent bg-panel py-3 pl-11 pr-4 text-base text-ink placeholder-faint transition focus:border-line-strong focus:outline-none sm:text-sm"
             />
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function MenuCatalog() {
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               aria-pressed={selectedCategory === cat}
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition ${
+              className={`whitespace-nowrap rounded-md px-4 py-2 text-sm font-semibold transition ${
                 selectedCategory === cat
                   ? 'bg-accent text-on-accent'
                   : 'text-soft hover:bg-panel hover:text-ink'
@@ -197,7 +197,7 @@ export default function MenuCatalog() {
                         <button
                           onClick={() => addToCart(menu)}
                           aria-label={`Pesan ${menu.name}`}
-                          className="flex h-10 items-center gap-1.5 rounded-full bg-accent px-4 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
+                          className="flex h-10 items-center gap-1.5 rounded-md bg-accent px-4 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
                         >
                           <Plus className="h-4 w-4" />
                           <span>Pesan</span>
@@ -214,7 +214,7 @@ export default function MenuCatalog() {
 
       {totalItems > 0 && (
         <div className="fixed bottom-0 left-0 right-0 z-40 p-4">
-          <div className="theme-dark mx-auto flex max-w-5xl animate-slideUp items-center justify-between gap-4 rounded-full bg-canvas py-2.5 pl-6 pr-2.5 text-ink shadow-[0_18px_40px_-12px_rgba(16,22,26,0.6)]">
+          <div className="theme-dark mx-auto flex max-w-5xl animate-slideUp items-center justify-between gap-4 rounded-md bg-canvas py-2.5 pl-6 pr-2.5 text-ink shadow-[0_18px_40px_-12px_rgba(16,22,26,0.6)]">
             <div className="flex items-center gap-3">
               <ShoppingBag className="h-5 w-5 text-soft" />
               <div>
@@ -225,7 +225,7 @@ export default function MenuCatalog() {
 
             <button
               onClick={() => navigate('/checkout')}
-              className="rounded-full bg-accent px-6 py-3 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
+              className="rounded-md bg-accent px-6 py-3 text-sm font-bold text-on-accent transition hover:bg-accent-hover active:scale-95"
             >
               Lanjut Bayar
             </button>

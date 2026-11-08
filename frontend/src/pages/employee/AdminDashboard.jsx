@@ -191,7 +191,7 @@ export default function AdminDashboard() {
               </div>
               <h3 className="text-sm font-bold text-ink">Pembayaran Tunai (Cash)</h3>
             </div>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-raised text-soft font-bold">
+            <span className="text-xs px-2.5 py-0.5 rounded-md bg-raised text-soft font-bold">
               {summary?.cash?.count || 0} Transaksi
             </span>
           </div>
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
               </div>
               <h3 className="text-sm font-bold text-ink">Pembayaran Cashless (QRIS / Transfer)</h3>
             </div>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-raised text-soft font-bold">
+            <span className="text-xs px-2.5 py-0.5 rounded-md bg-raised text-soft font-bold">
               {summary?.cashless?.count || 0} Transaksi
             </span>
           </div>

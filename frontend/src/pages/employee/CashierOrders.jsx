@@ -197,7 +197,7 @@ export default function CashierOrders() {
             }`}
           >
             <span>{tab.label}</span>
-            <span className={`px-1.5 py-0.5 rounded-full text-[11px] ${
+            <span className={`px-1.5 py-0.5 rounded-md text-[11px] ${
               activeTab === tab.key ? 'bg-canvas text-accent-text' : 'bg-raised text-soft'
             }`}>
               {tab.count}
@@ -236,7 +236,7 @@ export default function CashierOrders() {
                     </div>
 
                     <div className="text-right">
-                      <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider border ${
+                      <span className={`inline-block px-2.5 py-1 rounded-md text-[11px] font-extrabold uppercase tracking-wider border ${
                         order.status === 'COMPLETED'
                           ? 'bg-success/10 border-success/30 text-success'
                           : order.status === 'PROCESSING'

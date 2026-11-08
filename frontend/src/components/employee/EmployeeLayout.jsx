@@ -57,14 +57,14 @@ export default function EmployeeLayout() {
     }`;
 
   return (
-    <div className="theme-dark min-h-screen bg-canvas text-ink lg:pl-64">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-line bg-panel px-4 py-5 lg:flex">
+    <div className="theme-light min-h-screen bg-canvas text-ink lg:pl-64">
+      <aside className="theme-dark text-ink fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-line bg-panel px-4 py-5 lg:flex">
         <div className="flex items-center gap-3 px-2">
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent text-on-accent">
             {isAdmin ? <ShieldCheck className="h-5 w-5" /> : <ChefHat className="h-5 w-5" />}
           </span>
           <div>
-            <p className="font-extrabold leading-tight tracking-tight">Resto POS</p>
+            <p className="font-display text-xl font-semibold leading-tight tracking-[0.12em]">MICRODINE</p>
             <p className="text-xs text-faint">Portal Karyawan</p>
           </div>
         </div>
@@ -94,9 +94,9 @@ export default function EmployeeLayout() {
         </div>
       </aside>
 
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-panel/90 px-4 py-3 backdrop-blur-md lg:hidden">
+      <header className="theme-dark text-ink sticky top-0 z-30 flex items-center justify-between border-b border-line bg-panel/90 px-4 py-3 backdrop-blur-md lg:hidden">
         <div>
-          <p className="font-extrabold leading-tight tracking-tight">Resto POS</p>
+          <p className="font-display text-xl font-semibold leading-tight tracking-[0.12em]">MICRODINE</p>
           <p className="text-xs text-faint">
             {user.full_name}, <span className="capitalize">{user.role}</span>
           </p>
